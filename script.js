@@ -41,6 +41,11 @@ for (c = 0; c < brick_column_count; c++) {
 var score = 0;
 var lives = 3;
 
+var sound_life_lost = new Audio('sounds/voiceD_506_hell.wav');
+var sound_brick_hit = new Audio('sounds/2357_01.mp3');
+var sound_paddle_hit = new Audio('sounds/2357_02.mp3');
+var sound_game_over = new Audio('sounds/voiceS_1147_kikurihime.wav');
+
 draw();
 
 document.addEventListener("keydown", key_down_handler, false);
@@ -134,16 +139,20 @@ function draw_ball() {
     if (x > paddle_x && x < paddle_x + paddle_width) {
         if (y = y - paddle_height) {
           dy = -ball_speed;
+
+          sound_paddle_hit.play();
         }
     }
     else {
       console.log(lives);
       lives--;
       if (!lives) {
+        sound_game_over.play();
         alert('game over');
         window.location.reload();
       }
       else {
+        sound_life_lost.play();
         x = stage.width/2;
         y = stage.height-30;
         dx = 2;
@@ -199,6 +208,7 @@ function collision_detection() {
           dy = -dy;
           b.status = 0;
           score++;
+          sound_brick_hit.play();
 
           if (score % 2 === 0) {
             ball_speed += 0.5;
